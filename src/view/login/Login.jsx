@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "../../axios/axiosInstance";
 import {useAuth} from "../../context/authContext"
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [auth, setAuth] = useAuth()
+  const [auth, setAuth] = useAuth();
+  const navigate = useNavigate();
 
   const handleLogin = async() => {
     // Validate username and password (you can add more complex validation)
@@ -23,7 +25,7 @@ const Login = () => {
           token:res.data.token
         });
         localStorage.setItem('auth',JSON.stringify(res.data))
-        
+        navigate("/chats")
       }
     } catch (error) {
      // console.log(error);
