@@ -1,42 +1,36 @@
-import axios from '../axios/axiosInstance';
-import { createContext, useState, useEffect, useContext } from 'react';
+import axios from "../axios/axiosInstance";
+import { createContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
-const AuthProvider = ({children}) => {
-   const [auth,setAuth] = useState({
-    user: null,
-    token: ""
-   });
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
-   axios.defaults.headers.common.Authorization = auth?.token;
-   
-   useEffect(() => {
-    const data = localStorage.getItem('auth');
-
-    if(data){
-        const parsedata = JSON.parse(data);
-        setAuth({
-            ...auth,
-            user: parsedata.user,
-            token: parsedata.token
-        })
-
+  useEffect(() => {
+    // Check if user is authenticated
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
+  }, []);
 
+  const login = (userData) => {
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+    navigate("/chat");
+  };
 
-   },[]);
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
 
-   return (
-    <AuthContext.Provider value={[auth,setAuth]}>
-        {children}
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
     </AuthContext.Provider>
-   )
-
-
-
-}
-
-const useAuth = () => useContext(AuthContext);
-export {useAuth, AuthProvider}
-
+  );
+};
