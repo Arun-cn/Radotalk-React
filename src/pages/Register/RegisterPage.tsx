@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./../../components/ui/card";
-import RegisterForm from "@/components/form/registerForm/RegisterForm";
+import RegisterForm from "@/features/auth/components/RegisterForm";
 
 const RegisterPage = () => {
   return (
