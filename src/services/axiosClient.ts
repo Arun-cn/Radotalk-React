@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 
 const axiosClient: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
+  baseURL: "https://pitch-rich-canary.glitch.me",
   headers: {
     "Content-Type": "application/json",
   },

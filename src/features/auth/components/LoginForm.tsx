@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useAppDispatch, useAppSelector } from "@/hooks/useAppSateHook";
+import { loginUser } from "@/features/auth/authSlice";
 
 // Define Login Zod schema
 const loginSchema = z.object({
@@ -20,6 +22,8 @@ const loginSchema = z.object({
 });
 
 export function LoginForm() {
+  const dispatch = useAppDispatch();
+  const { loading } = useAppSelector((state) => state.auth);
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -29,7 +33,7 @@ export function LoginForm() {
   });
 
   function onSubmit(data: z.infer<typeof loginSchema>) {
-    console.log(data);
+    dispatch(loginUser(data));
   }
 
   return (
@@ -68,7 +72,9 @@ export function LoginForm() {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={loading}>
+          Submit
+        </Button>
       </form>
     </Form>
   );
